@@ -6,7 +6,7 @@ function pteViewModel(pteWordTranslator) {
 	self.word = ko.observable('');
 	self.translation = ko.computed(function() {
 		return self.pteWordTranslator.translateWord(self.word());
-	});
+	}); 
 }
 
 function Element(data) {
@@ -28,67 +28,76 @@ PTEWordTranslator.prototype.initialize = function(data) {
 	}
 }
 
-PTEWordTranslator.prototype.translateWord = function(word) {
-	var translatedWord = new Array();
-	// TODO: This initial implementation is quite dumb (only finds exact 1-char matches).
-	// Make this much better, including:
-	// 1) Searching for two-character matches (done)
-	// 2) Allowing for spaces, special characters (TODO)
-	// 3) Exception/null checks (TODO)
-	// 4) Giving preference to two-character matches (done)
-	// 5) Allowing for all possible 1 and 2 character matches (?)
-	// 6) Adding 1-char match to array if it's the last character in the string (done)
-	var currentSubString = "";
-	var matchedChar = null;
-	for (var index=0; index < word.length; ++index) {
+PTEWordTranslator.prototype.translateWord = function(word) {	
+	// Build up information on the 1-char and 2-char matches in the supplied word
+	var oneCharMatches = new Array();
+	var twoCharMatches = new Array();
+	for (var index = 0; index < word.length; ++index) {
 		var currentChar = word.charAt(index).toLowerCase();
-		if (currentSubString === "") {
-			// No match so far, so test if we can match the current char to an element
-			var el = this.elements[currentChar];
-			if (el != null) {
-				// Store the single-char match for use during the next loop in case we can't get a two-char match
-				matchedChar = el;
-				
-				if (index == word.length - 1) {
-					// This is the last char and we've found a match so add it
-					translatedWord.push(el);
-				}
-			}
-			
-			// Seed the first char of the next two-char test string
-			currentSubString = currentChar;
+		var el = this.elements[currentChar];
+		if (el != null) {
+			oneCharMatches.push(true);
+		} else {
+			oneCharMatches.push(false);
 		}
-		else {
-			var testString = currentSubString + currentChar;
-			var el = this.elements[testString];
+		
+		if (index > 0) {
+			var twoCharTest = word.charAt(index - 1).toLowerCase() + word.charAt(index).toLowerCase();
+			var el = this.elements[twoCharTest];
 			if (el != null) {
-				// Found a two-char march so use this and reset the state
-				translatedWord.push(el);
-				currentSubString = "";
-				matchedChar = null;
-			}
-			else {
-				// No two-char match exists so see if the previous match was a one-char match and assign
-				if (matchedChar != null) {
-					translatedWord.push(matchedChar);
-					matchedChar = null;
-				}
-				
-				// Now see if the current char is a match
-				el = this.elements[currentChar];
-				if (el != null) {
-					matchedChar = el;
-					
-					if (index == word.length - 1) {
-						// This is the last char and we've found a match so add it
-						translatedWord.push(el);
-					}
-				}
-				
-				currentSubString = currentChar;
+				twoCharMatches.push(true);
+			} else {
+				twoCharMatches.push(false);
 			}
 		}
 	}
+	
+	// Add final non-match to the 2-char array
+	twoCharMatches.push(false);
+	
+	var numMatchedChars = 0;
+	var translatedWord = new Array();
+	for (var index = 0; index < word.length; ++index) {
+		if (oneCharMatches[index]) {
+			if (twoCharMatches[index]) {
+				if (twoCharMatches[index + 1]) {
+					if (index + 2 < word.length) {
+						if (twoCharMatches[index + 2]) {
+							translatedWord.push(this.elements[word.charAt(index).toLowerCase() + word.charAt(index + 1).toLowerCase()]);
+							numMatchedChars += 2;
+							++index;
+						} else {
+							translatedWord.push(this.elements[word.charAt(index).toLowerCase()]);
+							numMatchedChars += 1;
+						}
+					} else {
+						translatedWord.push(this.elements[word.charAt(index).toLowerCase()]);
+						numMatchedChars += 1;
+					}
+				} else {
+					translatedWord.push(this.elements[word.charAt(index).toLowerCase() + word.charAt(index + 1).toLowerCase()]);
+					numMatchedChars += 2;
+					++index;
+				}
+			}
+			else {
+				translatedWord.push(this.elements[word.charAt(index).toLowerCase()]);
+				numMatchedChars += 1;
+			}
+		} else {
+			if (twoCharMatches[index]) {
+				translatedWord.push(this.elements[word.charAt(index).toLowerCase() + word.charAt(index + 1).toLowerCase()]);
+				numMatchedChars += 2;
+				++index;
+			}
+		}
+	}
+	
+	if (numMatchedChars != word.length) {
+		// Clear out any sub-matches if we can't match the entire word
+		translatedWord.length = 0;
+	}
+		
 	return translatedWord;
 }
 
@@ -107,5 +116,5 @@ var app = {
 			var pteWordTranslator = new PTEWordTranslator(pteJSON);
 			ko.applyBindings(new pteViewModel(pteWordTranslator));
 		}
-    },
+    }
 };

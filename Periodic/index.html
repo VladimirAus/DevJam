@@ -25,7 +25,12 @@
 			<span>Enter a word to translate: </span>
 			<input type="text" data-bind="value: word, valueUpdate: 'keyup'"></input>
         </div>
-		<div>
+		
+		<div style="margin-top:50px;" data-bind="visible: translation().length == 0">
+			<span>No Matches found</span>
+		</div>
+		
+		<div style="margin-top:50px;" data-bind="visible: translation().length > 0">
 			<ul data-bind="foreach: translation">
 				<li>
 					<div>
