@@ -32,14 +32,61 @@ PTEWordTranslator.prototype.translateWord = function(word) {
 	var translatedWord = new Array();
 	// TODO: This initial implementation is quite dumb (only finds exact 1-char matches).
 	// Make this much better, including:
-	// 1) Searching for two-character matches
-	// 2) Allowing for spaces, special characters
-	// 3) Exception/null checks
-	// 4) ...
+	// 1) Searching for two-character matches (done)
+	// 2) Allowing for spaces, special characters (TODO)
+	// 3) Exception/null checks (TODO)
+	// 4) Giving preference to two-character matches (done)
+	// 5) Allowing for all possible 1 and 2 character matches (?)
+	// 6) Adding 1-char match to array if it's the last character in the string (done)
+	var currentSubString = "";
+	var matchedChar = null;
 	for (var index=0; index < word.length; ++index) {
-		var el = this.elements[word.charAt(index).toLowerCase()];
-		if (el != null) {
-			translatedWord.push(el);
+		var currentChar = word.charAt(index).toLowerCase();
+		if (currentSubString === "") {
+			// No match so far, so test if we can match the current char to an element
+			var el = this.elements[currentChar];
+			if (el != null) {
+				// Store the single-char match for use during the next loop in case we can't get a two-char match
+				matchedChar = el;
+				
+				if (index == word.length - 1) {
+					// This is the last char and we've found a match so add it
+					translatedWord.push(el);
+				}
+			}
+			
+			// Seed the first char of the next two-char test string
+			currentSubString = currentChar;
+		}
+		else {
+			var testString = currentSubString + currentChar;
+			var el = this.elements[testString];
+			if (el != null) {
+				// Found a two-char march so use this and reset the state
+				translatedWord.push(el);
+				currentSubString = "";
+				matchedChar = null;
+			}
+			else {
+				// No two-char match exists so see if the previous match was a one-char match and assign
+				if (matchedChar != null) {
+					translatedWord.push(matchedChar);
+					matchedChar = null;
+				}
+				
+				// Now see if the current char is a match
+				el = this.elements[currentChar];
+				if (el != null) {
+					matchedChar = el;
+					
+					if (index == word.length - 1) {
+						// This is the last char and we've found a match so add it
+						translatedWord.push(el);
+					}
+				}
+				
+				currentSubString = currentChar;
+			}
 		}
 	}
 	return translatedWord;
