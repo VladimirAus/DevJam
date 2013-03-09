@@ -21,26 +21,31 @@
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
 
-        <div>
-			<ul data-bind="foreach: ELEMENTS">
+        <div style="margin-top:50px;">
+			<span>Enter a word to translate: </span>
+			<input type="text" data-bind="value: word, valueUpdate: 'keyup'"></input>
+        </div>
+		<div>
+			<ul data-bind="foreach: translation">
 				<li>
 					<div>
 						<p>
-							<span data-bind="text: NAME"></span>
+							<span data-bind="text: name"></span>
 							<br />
-							<span data-bind="text: ATOMIC_NUMBER"></span>
+							<span data-bind="text: atomicNumber"></span>
 							<br />
-							<span data-bind="text: SYMBOL"></span>
+							<span data-bind="text: symbol"></span>
 							<br />
-							<span data-bind="text: ATOMIC_WEIGHT"></span>
+							<span data-bind="text: atomicWeight"></span>
 						</p>
 					</div>
 				</li>
 			</ul>
-        </div>
+		</div>
 
 		<script src="js/vendor/jquery-1.9.1.min.js"></script>
         <script src="js/vendor/knockout-2.2.1.js"></script>
+		<script src="js/vendor/knockout.mapping-latest.js"></script>
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>
         
