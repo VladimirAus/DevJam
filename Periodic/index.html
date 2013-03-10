@@ -22,8 +22,8 @@
         <![endif]-->
 
         <div style="margin-top:50px;">
-			<span>Enter a word to translate: </span>
-			<input type="text" data-bind="value: word, valueUpdate: 'keyup'"></input>
+			<label for="word">Enter a word to translate:</label>
+			<input id="word" type="text" data-bind="value: word, valueUpdate: 'keyup'">
         </div>
 		
 		<div style="margin-top:50px;" data-bind="visible: translation().length == 0">

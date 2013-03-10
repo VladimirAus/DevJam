@@ -43,7 +43,7 @@ PTEWordTranslator.prototype.translateWord = function(word) {
 		
 		if (index > 0) {
 			var twoCharTest = word.charAt(index - 1).toLowerCase() + word.charAt(index).toLowerCase();
-			var el = this.elements[twoCharTest];
+			el = this.elements[twoCharTest];
 			if (el != null) {
 				twoCharMatches.push(true);
 			} else {
