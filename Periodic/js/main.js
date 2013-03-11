@@ -29,76 +29,54 @@ PTEWordTranslator.prototype.initialize = function(data) {
 }
 
 PTEWordTranslator.prototype.translateWord = function(word) {	
-	// Build up information on the 1-char and 2-char matches in the supplied word
-	var oneCharMatches = new Array();
-	var twoCharMatches = new Array();
-	for (var index = 0; index < word.length; ++index) {
-		var currentChar = word.charAt(index).toLowerCase();
-		var el = this.elements[currentChar];
-		if (el != null) {
-			oneCharMatches.push(true);
-		} else {
-			oneCharMatches.push(false);
-		}
-		
-		if (index > 0) {
-			var twoCharTest = word.charAt(index - 1).toLowerCase() + word.charAt(index).toLowerCase();
-			el = this.elements[twoCharTest];
-			if (el != null) {
-				twoCharMatches.push(true);
-			} else {
-				twoCharMatches.push(false);
-			}
-		}
-	}
-	
-	// Add final non-match to the 2-char array
-	twoCharMatches.push(false);
-	
-	var numMatchedChars = 0;
 	var translatedWord = new Array();
-	for (var index = 0; index < word.length; ++index) {
-		if (oneCharMatches[index]) {
-			if (twoCharMatches[index]) {
-				if (twoCharMatches[index + 1]) {
-					if (index + 2 < word.length) {
-						if (twoCharMatches[index + 2]) {
-							translatedWord.push(this.elements[word.charAt(index).toLowerCase() + word.charAt(index + 1).toLowerCase()]);
-							numMatchedChars += 2;
-							++index;
-						} else {
-							translatedWord.push(this.elements[word.charAt(index).toLowerCase()]);
-							numMatchedChars += 1;
-						}
-					} else {
-						translatedWord.push(this.elements[word.charAt(index).toLowerCase()]);
-						numMatchedChars += 1;
-					}
-				} else {
-					translatedWord.push(this.elements[word.charAt(index).toLowerCase() + word.charAt(index + 1).toLowerCase()]);
-					numMatchedChars += 2;
-					++index;
-				}
-			}
-			else {
-				translatedWord.push(this.elements[word.charAt(index).toLowerCase()]);
-				numMatchedChars += 1;
-			}
-		} else {
-			if (twoCharMatches[index]) {
-				translatedWord.push(this.elements[word.charAt(index).toLowerCase() + word.charAt(index + 1).toLowerCase()]);
-				numMatchedChars += 2;
-				++index;
-			}
+	var result = this.findMatch(word, 0, "");
+	if (result) {
+		var wordPos = 0;
+		for (var index = 0; index < result.length; ++index) {
+			var matchedChars = parseInt(result[index]);			
+			translatedWord.push(this.elements[word.substring(wordPos, wordPos + matchedChars).toLowerCase()]);
+			wordPos += matchedChars;
 		}
+	} 
+	
+	return translatedWord;
+}
+
+// The goal is to find any sequence of char matches that cover the entire word.
+// We give preference to larger matches, but this is arbitrary.
+// The history param is used to build up the search path through the word.
+PTEWordTranslator.prototype.findMatch = function(word, index, history) {
+	var sum = 0;
+	for (var i = 0; i < history.length; ++i) {
+		sum += parseInt(history[i]);
 	}
 	
-	if (numMatchedChars != word.length) {
-		// Clear out any sub-matches if we can't match the entire word
-		translatedWord.length = 0;
-	}
+	if (sum == word.length) {
+		return history;
+	} else if (sum > word.length) {
+		return null;
+	} else {
+		var oneCharMatch = null;
+		if (index < word.length) {
+			oneCharMatch = this.elements[word.charAt(index).toLowerCase()];
+		}
 		
-	return translatedWord;
+		var twoCharMatch = null;
+		if (index < word.length - 1) {
+			twoCharMatch = this.elements[word.substring(index, index + 2).toLowerCase()];
+		}
+		
+		var threeCharMatch = null;
+		if (index < word.length - 2) {
+			threeCharMatch = this.elements[word.substring(index, index + 3).toLowerCase()];
+		}
+		
+		return (threeCharMatch && this.findMatch(word, index + 3, history + "3")) 
+			|| (twoCharMatch && this.findMatch(word, index + 2, history + "2")) 
+			|| (oneCharMatch && this.findMatch(word, index + 1, history + "1")) 
+			|| null;
+	}
 }
 
 var app = {
