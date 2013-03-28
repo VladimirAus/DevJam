@@ -1,5 +1,8 @@
 ### HEAD
 
+### 0.0.4 (March 28, 2013)
+* Added basic jasmine specs and specrunner.html (Brent)
+
 ### 0.0.3 (March 12, 2013)
 * Update translateWord function to search for all possible matches, giving preference to matches that use less elements to display the word.
 
