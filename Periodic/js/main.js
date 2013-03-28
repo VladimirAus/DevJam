@@ -30,12 +30,13 @@ PTEWordTranslator.prototype.initialize = function(data) {
 
 PTEWordTranslator.prototype.translateWord = function(word) {	
 	var translatedWord = new Array();
-	var result = this.findMatch(word, 0, "");
+	var wordWithSpacesRemoved = word.split(' ').join('');
+	var result = this.findMatch(wordWithSpacesRemoved, 0, "");
 	if (result) {
 		var wordPos = 0;
 		for (var index = 0; index < result.length; ++index) {
 			var matchedChars = parseInt(result[index]);			
-			translatedWord.push(this.elements[word.substring(wordPos, wordPos + matchedChars).toLowerCase()]);
+			translatedWord.push(this.elements[wordWithSpacesRemoved.substring(wordPos, wordPos + matchedChars).toLowerCase()]);
 			wordPos += matchedChars;
 		}
 	} 
