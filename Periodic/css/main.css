@@ -16,10 +16,11 @@ input,
 select,
 textarea {
     color: #222;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 body {
-    font-size: 1em;
+    font-size: 11px;
     line-height: 1.4;
 }
 
@@ -93,7 +94,6 @@ textarea {
    Author's custom styles
    ========================================================================== */
 body {
-	width: 90%;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -107,21 +107,27 @@ li {
 	float: left;
 }
 
-li div {
-	width: 100px;
-	height: 100px;
+li div.pelement {
+	width: 60px;
+	height: 65px;
 	line-height: 100px;
-	border: 2px solid black;
-	margin: 2px;
+	border: 1px solid #999;
+	margin: 1px;
 	text-align: center;
 }
 
-li div p {
+li div.pelement p {
 	display: inline-block;
-	vertical-align: middle;
+	vertical-align: top;
 	line-height: normal;
+	margin: 4px 0;
+	padding: 0;
 }
 
+li div.pelement span {
+	clear: both;
+	display:block;
+}
 
 /* ==========================================================================
    Helper classes

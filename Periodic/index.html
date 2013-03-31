@@ -22,32 +22,29 @@
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
 
-        <div style="margin-top:50px;">
+        <div class="app-container">
 			<label for="word">Enter a word to translate:</label>
-			<input id="word" type="text" data-bind="value: word, valueUpdate: 'keyup'">
+			<input id="word" type="text" data-bind="value: word, valueUpdate: 'keyup'" value="[t]ALSiPSClAr[n]KCaScTiVCrMnFeCoNiCuZnGaGeAsSeBr[n]KrRbSrYZn" />
         </div>
 		
-		<div style="margin-top:50px;" data-bind="visible: translation().length == 0">
+		<div class="app-container" data-bind="visible: translation().length == 0">
 			<span>No Matches found</span>
 		</div>
 		
-		<div style="margin-top:50px;" data-bind="visible: translation().length > 0">
+		<div class="app-container" data-bind="visible: translation().length > 0">
 			<ul data-bind="foreach: translation">
-				<li>
+				<li data-bind="css: $parent.elementStatus()">
 					<div class="pelement">
 						<p>
+							<span class="elnum" data-bind="text: atomicNumber"></span>
+                            <span class="elsymb" data-bind="text: symbol"></span>
 							<span class="elname" data-bind="text: name"></span>
-							<br />
-							<span data-bind="text: atomicNumber"></span>
-							<br />
-							<span data-bind="text: symbol"></span>
-							<br />
-							<span data-bind="text: atomicWeight"></span>
+							<span class="elweight" data-bind="text: atomicWeight"></span>
 						</p>
 					</div>
 				</li>
-			</ul>
-			<div style="clear:both;"></div>
+			</ul>      
+            <div style="clear:both;"></div>                                            
 		</div>
 
 		<script src="js/vendor/jquery-1.9.1.min.js"></script>
