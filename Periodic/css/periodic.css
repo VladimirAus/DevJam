@@ -8,13 +8,54 @@
     -webkit-box-shadow: #666 0px 2px 3px;
     -moz-box-shadow: #666 0px 2px 3px;
     box-shadow: #666 0px 2px 3px;
-    background: #EEFF99;
-    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#EEFF99), to(#66EE33));
-    background: -webkit-linear-gradient(#EEFF99, #66EE33);
-    background: -moz-linear-gradient(#EEFF99, #66EE33);
-    background: -ms-linear-gradient(#EEFF99, #66EE33);
-    background: -o-linear-gradient(#EEFF99, #66EE33);
-    background: linear-gradient(#EEFF99, #66EE33);
+}
+
+.pte-line {
+	clear: left;
+}
+
+.pte-split .pelement,
+.pte-line .pelement {
+	display: none;
+}
+
+.pte-tab {
+	opacity:0.1;
+	filter:alpha(opacity=10);
+}
+
+.pte-tab .pelement p {
+	display: none;
+}
+
+.pte-metalloids-green .pelement {
+	background: #92ff9f;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#92ff9f), to(#72df7f));
+    background: -webkit-linear-gradient(#92ff9f, #72df7f);
+    background: -moz-linear-gradient(#92ff9f, #72df7f);
+    background: -ms-linear-gradient(#92ff9f, #72df7f);
+    background: -o-linear-gradient(#92ff9f, #72df7f);
+    background: linear-gradient(#92ff9f, #72df7f);
+}
+
+.pte-nonmetals-blue .pelement {
+	background: #ab91ff;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#ab91ff), to(#8b71df));
+    background: -webkit-linear-gradient(#ab91ff, #8b71df);
+    background: -moz-linear-gradient(#ab91ff, #8b71df);
+    background: -ms-linear-gradient(#ab91ff, #8b71df);
+    background: -o-linear-gradient(#ab91ff, #8b71df);
+    background: linear-gradient(#ab91ff, #8b71df);
+}
+
+.pte-halogens-purple .pelement {
+	background: #f991ff;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#f991ff), to(#d791df));
+    background: -webkit-linear-gradient(#f991ff, #d791df);
+    background: -moz-linear-gradient(#f991ff, #d791df);
+    background: -ms-linear-gradient(#f991ff, #d791df);
+    background: -o-linear-gradient(#f991ff, #d791df);
+    background: linear-gradient(#f991ff, #d791df);
 }
 
 .pelement .elsymb {
@@ -35,7 +76,7 @@
 input {
     border: 1px solid #ccc;
     font-size: 20px;
-    width: 300px;
+    width: 90%;
     min-height: 30px;
     display: block;
     margin-bottom: 15px;
